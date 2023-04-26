@@ -141,7 +141,7 @@ netD = Discriminator(ngpu).to(device)
 
 # Handle multi-GPU if desired
 if (device.type == 'cuda') and (ngpu > 1):
-    netD = nn.DataParallel(netD, list(range(ntpu)))
+    netD = nn.DataParallel(netD, list(range(ngpu)))
 
 # Apply the ``weights_init`` function to randomly initialize all weights
 # like this: ``to mean=0, stdev=0.2``
