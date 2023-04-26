@@ -14,7 +14,7 @@ import torchvision.utils as vutils
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from config import dataroot, image_size, batch_size, workers, ngpu, nz, ngf, nc
+from config import dataroot, image_size, batch_size, workers, ngpu, nz, nc, ngf, ndf
 import logging
 
 logging.basicConfig(filename="log.txt", level=logging.INFO)
@@ -105,4 +105,47 @@ netG.apply(weights_init)
 
 # Print the model
 logging.info(netG)
+
+# Discriminator code
+class Discriminator(nn.Module):
+    def __init__(self, ngpu):
+        super(Discriminator, self).__init__()
+        self.ngpu = ngpu
+        self.main = nn.Sequential(
+            # input is ``(nc) x 64 x 64``
+            nn.Conv2d(nc, ndf, 4, 2, 1, bias=False),
+            nn.LeakyReLU(0.2, inplace=True),
+            # state size. ``(ndf) x 32 x 32``
+            nn.Conv2d(ndf, ndf * 2, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ndf * 2),
+            nn.LeakyReLU(0.2, inplace=True),
+            # state size. ``(ndf*2) x 16 x 16``
+            nn.Conv2d(ndf * 2, ndf * 4, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ndf * 4),
+            nn.LeakyReLU(0.2, inplace=True),
+            # state size. ``(ndf*4) x 8 x 8``
+            nn.Conv2d(ndf * 4, ndf * 8, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ndf * 8),
+            nn.LeakyReLU(0.2, inplace=True),
+            # state size. ``(ndf*8) x 4 x 4``
+            nn.Conv2d(ndf * 8, 1, 4, 1, 0, bias=False),
+            nn.Sigmoid()
+        )
+
+    def forward(self, input):
+        return self.main(input)
+
+# Create the Discriminator
+netD = Discriminator(ngpu).to(device)
+
+# Handle multi-GPU if desired
+if (device.type == 'cuda') and (ngpu > 1):
+    netD = nn.DataParallel(netD, list(range(ntpu)))
+
+# Apply the ``weights_init`` function to randomly initialize all weights
+# like this: ``to mean=0, stdev=0.2``
+netD.apply(weights_init)
+
+# Print the model
+logging.info(netD)
 logging.info("Done!")
