@@ -51,6 +51,7 @@ plt.title("Training images")
 plt.imshow(np.transpose(vutils.make_grid(real_batch[0].to(device)[:64], padding=2,
                                          normalize=True).cpu(), (1, 2, 0)))
 plt.savefig("figure1.png")
+plt.close()
 
 # custom weights initialization called on ``netG`` and ``netD``
 def weights_init(m):
@@ -239,3 +240,14 @@ for epoch in range(num_epochs):
             img_list.append(vutils.make_grid(fake, padding=2, normalize=True))
 
         iters += 1
+
+# Plot results
+plt.figure(figsize=(10,5))
+plt.title("Generator and Discriminator Loss During Training")
+plt.plot(G_losses, label="G")
+plt.plot(D_losses, label="D")
+plt.xlabel("iterations")
+plt.ylabel("Loss")
+plt.legend()
+plt.show()
+plt.savefig("figure2.png")
