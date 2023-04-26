@@ -1,4 +1,4 @@
-dataroot    = "data/celeba" # Root directory for dataset
+dataroot    = "data/img_align_celeba" # Root directory for dataset
 workers     = 2             # Number of workers for dataloader
 batch_size  = 128           # Batch size during training
 image_size  = 64            # Spatial size of training images. All images will be resized to this size using a transformer
