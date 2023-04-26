@@ -14,7 +14,7 @@ import torchvision.utils as vutils
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from config import image_size, batch_size, workers, ngpu
+from config import dataroot, image_size, batch_size, workers, ngpu
 import logging
 
 logging.basicConfig(filename="log.txt", level=logging.INFO)
