@@ -104,5 +104,5 @@ if (device.type == 'cuda') and (ngpu > 1):
 netG.apply(weights_init)
 
 # Print the model
-print(netG)
-print("Done!")
+logging.info(netG)
+logging.info("Done!")
