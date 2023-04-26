@@ -9,4 +9,4 @@ ndf         = 64            # Size of feature maps in discriminator
 num_epochs  = 100           # Number of training epochs
 lr          = 0.0002        # Learning rate for optimizers
 beta1       = 0.5           # Beta1 hyperparameter for Adam optimizers
-ngpu        = 1             # Number of GPUs available. Use 0 for CPU mode.
+ngpu        = 2             # Number of GPUs available. Use 0 for CPU mode.
