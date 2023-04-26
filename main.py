@@ -105,3 +105,4 @@ netG.apply(weights_init)
 
 # Print the model
 print(netG)
+print("Done!")
