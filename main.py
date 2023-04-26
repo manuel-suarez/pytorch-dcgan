@@ -14,7 +14,7 @@ import torchvision.utils as vutils
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from config import dataroot, image_size, batch_size, workers, ngpu, nz, nc, ngf, ndf
+from config import dataroot, image_size, batch_size, workers, ngpu, nz, nc, ngf, ndf, lr, beta1
 import logging
 
 logging.basicConfig(filename="log.txt", level=logging.INFO)
@@ -149,3 +149,18 @@ netD.apply(weights_init)
 # Print the model
 logging.info(netD)
 logging.info("Done!")
+
+# Loss functions and optimizers
+criterion = nn.BCELoss()
+
+# Create batch of latent vectors thata we will use to visualize
+#  the progression of the generator
+fixed_noise = torch.randn(64, nz, 1, 1, device=device)
+
+# Establish convention for real and fake labels during training
+real_label = 1.
+fake_label = 0.
+
+# Setup Adam optimizers for both G and D
+optimizerD = optim.Adam(netD.parameters(), lr=lr, betas=(beta1, 0.999))
+optimizerG = optim.Adam(netG.parameters(), lr=lr, betas=(beta1, 0.999))
